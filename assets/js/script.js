@@ -4,6 +4,13 @@ const GEO_PATH = '/geo/1.0/direct';
 const WEATHER_PATH = '/data/2.5/weather';
 const FIVE_DAY_PATH= '/data/2.5/forecast';
 
+const searchForm = document.querySelector('#city-search');
+const inputEl = document.querySelector('#q');
+const cityContainer = document.querySelector('#cities');
+const weatherEl = document.querySelector('#current-weather');
+const fiveDayContainer = document.querySelector('#five-day');
+
+
 const testLat = 35.2272086;
 const testLon = -80.8430827;
 const testCity = 'Charlotte';
