@@ -11,6 +11,7 @@ const weatherEl = document.querySelector('#current-weather');
 const fiveDayContainer = document.querySelector('#five-day');
 
 
+
 const testLat = 35.2272086;
 const testLon = -80.8430827;
 const testCity = 'Charlotte';
@@ -31,9 +32,20 @@ function getCurrentWeather() {
         return response.json();
       })
       .then(function(data) {
-        console.log(data);
+        weatherEl.innerHTML = null;
+        const h4El = document.createElement('h4');
+        h4El.textContent = data.name;
+        h4El.className = 'card-title';
+        weatherEl.appendChild(h4El);
+        for (const line of [data.main.temp, data.main.humidity, data.wind.speed]) {
+            const lineEl = document.createElement('p');
+            lineEl.textContent = line;
+            weatherEl.appendChild(lineEl);
+        }
       });
   }
+
+
 
   function getFiveDayForecast() {
     fetch(`${BASE_PATH}${FIVE_DAY_PATH}?appid=${API_KEY}&lat=${testLat}&lon=${testLon}&units=imperial`)
@@ -41,7 +53,35 @@ function getCurrentWeather() {
         return response.json();
       })
       .then(function(data) {
-        console.log(data);
+        fiveDayContainer.innerHTML = ''; // Clear the container before adding new content
+  
+        for (let i = 0; i < data.list.length; i += 8) {
+          const weather = data.list[i];
+          const colEl = document.createElement('div');
+          colEl.className = 'col-12 col-xl';
+          fiveDayContainer.appendChild(colEl);
+  
+          const cardEl = document.createElement('div');
+          cardEl.className = 'card m-3 p-3';
+          colEl.appendChild(cardEl);
+  
+          const cardBody = document.createElement('div');
+          cardBody.className = 'card-body';
+          cardEl.appendChild(cardBody);
+  
+          const h4El = document.createElement('h4');
+          h4El.textContent = weather.dt_txt;
+          h4El.className = 'card-title';
+          cardBody.appendChild(h4El);
+  
+          const dataLines = [weather.main.temp, weather.main.humidity, weather.wind.speed];
+          for (const line of dataLines) {
+            const lineEl = document.createElement('p');
+            lineEl.textContent = line;
+            cardBody.appendChild(lineEl);
+          }
+        }
       });
   }
 
+  getFiveDayForecast();
