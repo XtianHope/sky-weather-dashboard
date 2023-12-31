@@ -119,9 +119,37 @@ searchForm.addEventListener("submit", function (event) {
 });
 
 
-// Function to save city to local storage
+// Function to Save City to Local Storage
 function saveCityToLocalStorage(city) {
     let cities = JSON.parse(localStorage.getItem('cities')) || [];
     cities.push(city);
     localStorage.setItem('cities', JSON.stringify(cities));
+  }
+
+  // Function to Retrieve and Display Cities from Local Storage
+function displayCitiesFromLocalStorage() {
+    const cities = JSON.parse(localStorage.getItem('cities')) || [];
+    cityContainer.innerHTML = '';
+    cities.forEach(city => {
+      const cityButton = document.createElement('button');
+      cityButton.textContent = city;
+      cityButton.className = 'btn btn-lg btn-secondary mb-3 w-100';
+      cityContainer.appendChild(cityButton);
+    });
+  }
+  
+  function getGeocoding(city) {
+    fetch(`${BASE_PATH}${GEO_PATH}?appid=${API_KEY}&limit=1&q=${city}`)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+        const lat = data[0].lat;
+        const lon = data[0].lon;
+        getCurrentWeather(lat, lon);
+        getFiveDayForecast(lat, lon);
+        saveCityToLocalStorage(city); 
+        displayCitiesFromLocalStorage(); 
+      });
   }
