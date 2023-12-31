@@ -117,3 +117,11 @@ searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
   getGeocoding(inputEl.value.trim());
 });
+
+
+// Function to save city to local storage
+function saveCityToLocalStorage(city) {
+    let cities = JSON.parse(localStorage.getItem('cities')) || [];
+    cities.push(city);
+    localStorage.setItem('cities', JSON.stringify(cities));
+  }
