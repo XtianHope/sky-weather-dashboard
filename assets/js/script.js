@@ -10,6 +10,9 @@ const cityContainer = document.querySelector("#cities");
 const weatherEl = document.querySelector("#current-weather");
 const fiveDayContainer = document.querySelector("#five-day");
 
+
+
+// Function to pull weather data from OpenWeather API
 function getGeocoding(city) {
   fetch(`${BASE_PATH}${GEO_PATH}?appid=${API_KEY}&limit=1&q=${city}`)
     .then(function (response) {
@@ -28,6 +31,7 @@ function getGeocoding(city) {
     });
 }
 
+// Current Weather Function
 function getCurrentWeather(lat, lon) {
   fetch(
     `${BASE_PATH}${WEATHER_PATH}?appid=${API_KEY}&lat=${lat}&lon=${lon}&units=imperial`
@@ -53,6 +57,7 @@ function getCurrentWeather(lat, lon) {
     });
 }
 
+// Five Day Forecast Function
 function getFiveDayForecast(lat, lon) {
   fetch(
     `${BASE_PATH}${FIVE_DAY_PATH}?appid=${API_KEY}&lat=${lat}&lon=${lon}&units=imperial`
@@ -77,7 +82,7 @@ function getFiveDayForecast(lat, lon) {
         cardBody.className = "card-body";
         cardEl.appendChild(cardBody);
 
-      
+    //   Changed Formatting of Date
         const date = new Date(weather.dt_txt);
         const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
         const h4El = document.createElement('h4');
@@ -85,7 +90,7 @@ function getFiveDayForecast(lat, lon) {
         h4El.className = 'card-title';
         cardBody.appendChild(h4El);
 
-
+    // Display Weather Icons
         const icon = weather.weather[0].icon;
         const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
         const iconImg = document.createElement("img");
@@ -106,6 +111,8 @@ function getFiveDayForecast(lat, lon) {
     });
 }
 
+
+// Event Listener for Search Button
 searchForm.addEventListener("submit", function (event) {
   event.preventDefault();
   getGeocoding(inputEl.value.trim());
