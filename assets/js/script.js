@@ -10,8 +10,6 @@ const cityContainer = document.querySelector("#cities");
 const weatherEl = document.querySelector("#current-weather");
 const fiveDayContainer = document.querySelector("#five-day");
 
-
-
 // Function to pull weather data from OpenWeather API
 function getGeocoding(city) {
   fetch(`${BASE_PATH}${GEO_PATH}?appid=${API_KEY}&limit=1&q=${city}`)
@@ -45,15 +43,19 @@ function getCurrentWeather(lat, lon) {
       h4El.textContent = data.name;
       h4El.className = "card-title";
       weatherEl.appendChild(h4El);
-      for (const line of [
-        data.main.temp,
-        data.main.humidity,
-        data.wind.speed,
-      ]) {
+
+      const weatherData = [
+        { label: "Temp", value: data.main.temp },
+        { label: "Humidity", value: data.main.humidity },
+        { label: "Wind", value: data.wind.speed },
+      ];
+
+      // Populate Weather Data
+      weatherData.forEach((item) => {
         const lineEl = document.createElement("p");
-        lineEl.textContent = line;
+        lineEl.textContent = `${item.label}: ${item.value}`;
         weatherEl.appendChild(lineEl);
-      }
+      });
     });
 }
 
@@ -82,35 +84,40 @@ function getFiveDayForecast(lat, lon) {
         cardBody.className = "card-body";
         cardEl.appendChild(cardBody);
 
-    //   Changed Formatting of Date
         const date = new Date(weather.dt_txt);
-        const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-        const h4El = document.createElement('h4');
+        const formattedDate = `${
+          date.getMonth() + 1
+        }/${date.getDate()}/${date.getFullYear()}`;
+        const h4El = document.createElement("h4");
         h4El.textContent = formattedDate;
-        h4El.className = 'card-title';
+        h4El.className = "card-title";
         cardBody.appendChild(h4El);
 
-    // Display Weather Icons
         const icon = weather.weather[0].icon;
         const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
+
+        // Creating the image element for the weather icon
         const iconImg = document.createElement("img");
         iconImg.src = iconUrl;
+        iconImg.alt = "Weather Icon";
+
+        // Appending the weather icon to the card body
         cardBody.appendChild(iconImg);
 
         const dataLines = [
-          weather.main.temp,
-          weather.main.humidity,
-          weather.wind.speed,
+          { label: "Temp", value: weather.main.temp },
+          { label: "Humidity", value: weather.main.humidity },
+          { label: "Wind", value: weather.wind.speed },
         ];
-        for (const line of dataLines) {
+
+        dataLines.forEach((item) => {
           const lineEl = document.createElement("p");
-          lineEl.textContent = line;
+          lineEl.textContent = `${item.label}: ${item.value}`;
           cardBody.appendChild(lineEl);
-        }
+        });
       }
     });
 }
-
 
 // Event Listener for Search Button
 searchForm.addEventListener("submit", function (event) {
@@ -118,43 +125,42 @@ searchForm.addEventListener("submit", function (event) {
   getGeocoding(inputEl.value.trim());
 });
 
-
 // Function to Save City to Local Storage
 function saveCityToLocalStorage(city) {
-    let cities = JSON.parse(localStorage.getItem('cities')) || [];
-    cities.push(city);
-    localStorage.setItem('cities', JSON.stringify(cities));
-  }
+  let cities = JSON.parse(localStorage.getItem("cities")) || [];
+  cities.push(city);
+  localStorage.setItem("cities", JSON.stringify(cities));
+}
 
-  // Function to Retrieve and Display Cities from Local Storage
+// Function to Retrieve and Display Cities from Local Storage
 function displayCitiesFromLocalStorage() {
-    const cities = JSON.parse(localStorage.getItem('cities')) || [];
-    cityContainer.innerHTML = '';
-    cities.forEach(city => {
-      const cityButton = document.createElement('button');
-      cityButton.textContent = city;
-      cityButton.className = 'btn btn-lg btn-secondary mb-3 w-100';
-      cityButton.addEventListener('click', function() {
-        getGeocoding(city);
-      });
-      cityContainer.appendChild(cityButton);
+  const cities = JSON.parse(localStorage.getItem("cities")) || [];
+  cityContainer.innerHTML = "";
+  cities.forEach((city) => {
+    const cityButton = document.createElement("button");
+    cityButton.textContent = city;
+    cityButton.className = "btn btn-lg btn-secondary mb-3 w-100";
+    cityButton.addEventListener("click", function () {
+      getGeocoding(city);
     });
-  }
-  
-  function getGeocoding(city) {
-    fetch(`${BASE_PATH}${GEO_PATH}?appid=${API_KEY}&limit=1&q=${city}`)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        console.log(data);
-        const lat = data[0].lat;
-        const lon = data[0].lon;
-        getCurrentWeather(lat, lon);
-        getFiveDayForecast(lat, lon);
-        saveCityToLocalStorage(city); 
-        displayCitiesFromLocalStorage(); 
-      });
-  }
+    cityContainer.appendChild(cityButton);
+  });
+}
 
-  displayCitiesFromLocalStorage();
+function getGeocoding(city) {
+  fetch(`${BASE_PATH}${GEO_PATH}?appid=${API_KEY}&limit=1&q=${city}`)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      const lat = data[0].lat;
+      const lon = data[0].lon;
+      getCurrentWeather(lat, lon);
+      getFiveDayForecast(lat, lon);
+      saveCityToLocalStorage(city);
+      displayCitiesFromLocalStorage();
+    });
+}
+
+displayCitiesFromLocalStorage();
