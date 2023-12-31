@@ -134,6 +134,9 @@ function displayCitiesFromLocalStorage() {
       const cityButton = document.createElement('button');
       cityButton.textContent = city;
       cityButton.className = 'btn btn-lg btn-secondary mb-3 w-100';
+      cityButton.addEventListener('click', function() {
+        getGeocoding(city);
+      });
       cityContainer.appendChild(cityButton);
     });
   }
@@ -153,3 +156,5 @@ function displayCitiesFromLocalStorage() {
         displayCitiesFromLocalStorage(); 
       });
   }
+
+  displayCitiesFromLocalStorage();
