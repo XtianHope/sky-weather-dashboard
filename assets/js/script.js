@@ -26,6 +26,10 @@ function getGeocoding(city) {
       cityButton.textContent = city;
       cityButton.className = "btn btn-lg btn-secondary mb-3 w-100";
       cityContainer.appendChild(cityButton);
+
+      // Show the weather cards after data is fetched
+      weatherEl.classList.remove("d-none");
+      fiveDayContainer.classList.remove("d-none");
     });
 }
 
@@ -53,9 +57,11 @@ function getCurrentWeather(lat, lon) {
       iconImg.src = iconUrl;
       iconImg.alt = "Weather Icon";
 
+    // CSS FOR WEATHER ICON TEST
+    iconImg.classList.add("weather-icon", "img-fluid"); 
+
       // Appending the weather icon to the card body
       weatherEl.appendChild(iconImg);
-
 
       const weatherData = [
         { label: "Temp", value: data.main.temp },
@@ -70,6 +76,8 @@ function getCurrentWeather(lat, lon) {
         weatherEl.appendChild(lineEl);
       });
     });
+  // Show Weather Card After Populating Data
+  weatherEl.classList.remove("d-none");
 }
 
 // Five Day Forecast Function
@@ -131,6 +139,7 @@ function getFiveDayForecast(lat, lon) {
         });
       }
     });
+  fiveDayContainer.classList.remove("d-none");
 }
 
 // Event Listener for Search Button

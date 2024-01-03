@@ -15,7 +15,7 @@ Learnings
 - Developers will gain experience in efficiently handling API integration for weather data and implementing dynamic frontend interactions for seamless user experience.
 
 ## Screenshot
-![Screenshot of Weather Dashboard](./images/sky-weather-dashboard.png)
+![Screenshot of Weather Dashboard](./images/sky-weather-dash.png)
 
 
 ## Links
