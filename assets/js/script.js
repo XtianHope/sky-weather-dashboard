@@ -44,6 +44,19 @@ function getCurrentWeather(lat, lon) {
       h4El.className = "card-title";
       weatherEl.appendChild(h4El);
 
+      // Weather icon
+      const icon = data.weather[0].icon;
+      const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
+
+      // Creating the image element for the weather icon
+      const iconImg = document.createElement("img");
+      iconImg.src = iconUrl;
+      iconImg.alt = "Weather Icon";
+
+      // Appending the weather icon to the card body
+      weatherEl.appendChild(iconImg);
+
+
       const weatherData = [
         { label: "Temp", value: data.main.temp },
         { label: "Humidity", value: data.main.humidity },
@@ -93,6 +106,7 @@ function getFiveDayForecast(lat, lon) {
         h4El.className = "card-title";
         cardBody.appendChild(h4El);
 
+        // Weather icon
         const icon = weather.weather[0].icon;
         const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
 
